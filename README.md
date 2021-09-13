@@ -7,14 +7,17 @@ You will interact with a compact memory (serialized) representation of key value
 
 #### Format:
 This project uses a custom memory buffer representation of key-value pairs and requires you to
-perform pointer arithmetic and memory operations for data deserialization along with linked list implementations. The file **kv_store.c** contain skeleton functions for you to complete, each with comments describing its behavior. 
+perform pointer arithmetic and memory operations for data deserialization along with linked list implementations. The file **kv_store.c** contains skeleton functions for you to complete, each with comments describing its behavior. 
 
 #### Key-Value Deserialization:
 
 The serialized buffer contains key value pairs in the following memory layout.
+
 ```
-|key|size|string_value|key|size|string_value|....
+|key|size|value string|key|size|value string|....
 ```
+Note that 'key' is 8 bytes and size is a 4-byte unsigned integer.
+
 Deserialization is the process of reading through this buffer, starting at the very beginning,
 and extracting the relevant information. In this case, it is reading key value pairs.
 
@@ -73,5 +76,5 @@ $ python3 hwtest.py ALL
 
 - ***Team specific instructions*** 
   - Teams should only do one submission via group submission.
-  - Teams must also edit the file called reflection.txt and include a detailed description of each team members' contributions to the project.
+  - Teams must also edit the file called reflection.txt and include a detailed description of each team member's contributions to the project.
   
