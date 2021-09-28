@@ -20,9 +20,50 @@
  * Assumptions: buf is not empty or NULL and the buffer_size is the correct size of buf
  */
 
+
 KVPAIR *deserialize(char *buf, size_t buffer_size) {
-    return NULL;
+    struct KVP *loop = (struct KVP *)malloc(sizeof(struct KVP));
+
+    int mem = 0;
+    loop -> val = NULL;
+    loop -> next = NULL ;
+    loop -> size = (unsigned long ) 0;
+    loop -> key =(unsigned long) 0;
+    struct KVP *node =loop;
+
+    while(mem < buffer_size){
+
+        memcpy(&loop -> key, buf + mem, sizeof(loop -> key));
+        mem += sizeof(loop -> key);
+
+        memcpy(&loop -> size, buf + mem, sizeof(loop -> size));
+        mem += sizeof(loop -> size);
+
+        loop -> val = malloc((loop -> size));
+        memcpy((loop -> val), buf + mem,(loop -> size));
+        mem += (loop -> size);
+
+        if (mem < buffer_size){
+
+            struct KVP *nextn = (struct KVP * )malloc(sizeof(struct KVP));
+
+
+            nextn -> val = NULL;
+            nextn -> next = NULL ;
+            nextn -> size = 0;
+            nextn-> key = 0;
+
+
+
+            loop -> next = nextn;
+            loop = loop -> next;
+
+        }
+    }
+    return node;
 }
+
+
 
 
 /**
@@ -39,6 +80,14 @@ KVPAIR *deserialize(char *buf, size_t buffer_size) {
  */
 
 KVPAIR *lookup(KVPAIR *list, long key) {
+
+    while (list != NULL){
+        if (list -> key == key){
+            return list;
+        }
+
+        list = list-> next;
+    }
     return NULL;
 }
 
@@ -60,5 +109,26 @@ KVPAIR *lookup(KVPAIR *list, long key) {
  */
 
 int delete(KVPAIR **list, long key) {
+    KVPAIR *node = *list;
+    KVPAIR *prev = NULL;
+    while(node != NULL){
+        if (node -> key == key){
+            if (prev == NULL){
+                *list = node -> next;
+                free(node->val);
+                free(node);
+                return 1;
+
+            }
+            else{
+                prev -> next = node -> next;
+            free(node->val);
+            free(node);
+            return 1;
+            }
+        }
+        prev = node;
+        node = node -> next;
+    }
     return 0;
 }
